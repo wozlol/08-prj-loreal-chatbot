@@ -224,7 +224,7 @@ body {
   margin-top: 12px;
 }
 
-.site-footer a {
+.site-footer nav a {
   margin: 0 8px;
   color: var(--black);
   text-decoration: none;
@@ -232,6 +232,13 @@ body {
 
 .site-footer a:hover {
   color: var(--gold);
+}
+
+/* credit line links sit inside the sentence, so underline them */
+.site-footer p a {
+  color: var(--black);
+  text-decoration: underline;
+  text-decoration-color: var(--gold);
 }
 
 /* small screens */
