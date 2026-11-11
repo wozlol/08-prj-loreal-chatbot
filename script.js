@@ -31,6 +31,72 @@ function addMessage(text, who) {
   return bubble;
 }
 
+/* Turn the bot's markdown (**bold**, lists, etc.) into safe HTML */
+function renderMarkdown(text) {
+  // Step 1: escape HTML so the reply can never inject tags into the page
+  const escape = (s) =>
+    s
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;");
+
+  // Step 2: inline styles inside a line: links, bold, italic, code
+  const inline = (s) =>
+    escape(s)
+      .replace(
+        /\[([^\]]+)\]\((https?:\/\/[^\s)"]+)\)/g,
+        '<a href="$2" target="_blank" rel="noopener">$1</a>',
+      )
+      .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+      .replace(/(^|[^*])\*(?!\s)(.+?)\*(?!\*)/g, "$1<em>$2</em>")
+      .replace(/`([^`]+)`/g, "<code>$1</code>");
+
+  // Step 3: go line by line and build paragraphs and lists
+  let html = "";
+  let listType = null; // "ul", "ol", or null
+  let paragraph = []; // lines waiting to become one <p>
+
+  const closeParagraph = () => {
+    if (paragraph.length) html += `<p>${paragraph.join("<br>")}</p>`;
+    paragraph = [];
+  };
+  const closeList = () => {
+    if (listType) html += `</${listType}>`;
+    listType = null;
+  };
+
+  for (const line of text.split("\n")) {
+    const bullet = line.match(/^\s*[-*•]\s+(.*)/);
+    const number = line.match(/^\s*\d+[.)]\s+(.*)/);
+    const heading = line.match(/^\s*#{1,6}\s+(.*)/);
+
+    if (bullet || number) {
+      closeParagraph();
+      const type = bullet ? "ul" : "ol";
+      if (listType !== type) {
+        closeList();
+        html += `<${type}>`;
+        listType = type;
+      }
+      html += `<li>${inline((bullet || number)[1])}</li>`;
+    } else if (heading) {
+      closeParagraph();
+      closeList();
+      html += `<p><strong>${inline(heading[1])}</strong></p>`;
+    } else if (line.trim() === "") {
+      closeParagraph();
+      closeList();
+    } else {
+      closeList();
+      paragraph.push(inline(line.trim()));
+    }
+  }
+  closeParagraph();
+  closeList();
+  return html;
+}
+
 /* Set initial message */
 addMessage("👋 Hello! I'm your L'Oréal Beauty Advisor. What can I help you find today?", "ai");
 
@@ -71,7 +137,7 @@ chatForm.addEventListener("submit", async (e) => {
     // Save the reply to history and show it
     messages.push({ role: "assistant", content: reply });
     thinking.classList.remove("thinking");
-    thinking.textContent = reply;
+    thinking.innerHTML = renderMarkdown(reply);
   } catch (error) {
     // Network or response problem: drop the unanswered question from history
     console.error(error);

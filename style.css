@@ -110,6 +110,35 @@ body {
   border-radius: 16px 16px 16px 2px;
 }
 
+/* formatted bot replies: normal spacing, real paragraphs and lists */
+.msg.ai {
+  white-space: normal;
+}
+
+.msg p {
+  margin: 0 0 8px;
+}
+
+.msg p:last-child,
+.msg ul:last-child,
+.msg ol:last-child {
+  margin-bottom: 0;
+}
+
+.msg ul,
+.msg ol {
+  margin: 4px 0 8px 20px;
+}
+
+.msg li {
+  margin-bottom: 4px;
+}
+
+.msg a {
+  color: var(--black);
+  text-decoration-color: var(--gold);
+}
+
 .msg.thinking {
   color: var(--grey);
   font-style: italic;
