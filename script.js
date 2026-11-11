@@ -6,7 +6,7 @@ const latestQuestion = document.getElementById("latestQuestion");
 const sendBtn = document.getElementById("sendBtn");
 
 /* Your deployed Cloudflare Worker URL goes here (no API key, ever) */
-const WORKER_URL = "https://loreal-chatbot.your-subdomain.workers.dev/";
+const WORKER_URL = "https://loreal-chatbot.jawozni1.workers.dev/";
 
 /* System prompt: keeps the bot on L'Oréal and beauty topics only */
 const SYSTEM_PROMPT = `You are the L'Oréal Beauty Advisor, a friendly and knowledgeable assistant.
