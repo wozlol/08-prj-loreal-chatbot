@@ -19,9 +19,9 @@ export default {
     const userInput = await request.json();
 
     const requestBody = {
-      model: 'gpt-4o',
+      model: 'gpt-4.1',
       messages: userInput.messages,
-      max_completion_tokens: 300,
+      max_completion_tokens: 500,
     };
 
     const response = await fetch(apiUrl, {
