@@ -14,6 +14,13 @@
     <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png" />
     <link rel="apple-touch-icon" href="img/apple-touch-icon.png" />
 
+    <!-- Makes the site installable as an app (name, icons and how it opens) -->
+    <link rel="manifest" href="manifest.json" />
+    <meta name="theme-color" content="#000000" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Beauty Advisor" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+
     <!-- Open Graph (link previews) -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content="L'Oréal Beauty Advisor" />
@@ -116,9 +123,18 @@
           <a href="#">Terms of Use</a>
           <a href="#">Contact</a>
         </nav>
+
+        <!-- Install App button, shown by pwa.js only when installing is possible -->
+        <div id="installRow" class="install-row" hidden>
+          <button type="button" id="installBtn" class="install-btn" hidden>
+            Install App
+          </button>
+          <p id="installNote" class="install-note" hidden></p>
+        </div>
       </footer>
     </div>
 
     <script src="script.js"></script>
+    <script src="pwa.js"></script>
   </body>
 </html>
